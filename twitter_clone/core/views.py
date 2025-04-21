@@ -70,6 +70,9 @@ def profile(request, username):
     user = get_object_or_404(User, username=username)
     tweets = Tweet.objects.filter(user=user)
 
+    # Get tweets liked by the user
+    liked_tweets = Tweet.objects.filter(likes=user)
+
     # Check if current user follows this profile
     is_following = False
     if request.user.is_authenticated:
@@ -78,6 +81,7 @@ def profile(request, username):
     context = {
         'user_profile': user,
         'tweets': tweets,
+        'liked_tweets': liked_tweets,
         'is_following': is_following
     }
     return render(request, 'core/profile.html', context)

@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}{{ user_profile.username }} - Twitter Clone{% endblock %}
+{% block title %}{{ user_profile.username }} - Twitter  {% endblock %}
 
 {% block content %}
 <div class="row">
@@ -151,13 +151,69 @@
 
             <!-- Likes Tab -->
             <div class="tab-pane fade" id="likes">
-                <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
-                    <div class="py-5">
-                        <i class="far fa-heart text-primary mb-3 fa-3x"></i>
-                        <h4>Likes</h4>
-                        <p class="text-muted">Tweets liked by {{ user_profile.username }} will show up here.</p>
+                {% if liked_tweets %}
+                    {% for tweet in liked_tweets %}
+                        <div class="card tweet-card mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="card-body">
+                                <div class="d-flex mb-3">
+                                    <img src="{{ tweet.user.profile.get_profile_pic_url }}" alt="{{ tweet.user.username }}" class="rounded-circle me-3" width="50" height="50">
+                                    <div>
+                                        <div class="d-flex align-items-center">
+                                            <h6 class="card-title mb-0 me-2">
+                                                <a href="{% url 'profile' tweet.user.username %}" class="text-decoration-none text-dark">
+                                                    {{ tweet.user.username }}
+                                                </a>
+                                            </h6>
+                                            <small class="text-muted">@{{ tweet.user.username }} · {{ tweet.created_at|timesince }}</small>
+                                        </div>
+                                        {% if tweet.is_retweet %}
+                                            <div class="small text-muted mb-2">
+                                                <i class="fas fa-retweet"></i> Retweeted from
+                                                <a href="{% url 'profile' tweet.original_tweet.user.username %}" class="text-decoration-none">
+                                                    @{{ tweet.original_tweet.user.username }}
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p class="card-text mb-3">{{ tweet.content }}</p>
+                                {% if tweet.image %}
+                                    <div class="tweet-image-container mb-3 rounded-4 overflow-hidden">
+                                        <img src="{{ tweet.image.url }}" alt="Tweet image" class="img-fluid w-100 tweet-image">
+                                    </div>
+                                {% endif %}
+                                <div class="tweet-actions d-flex justify-content-between align-items-center">
+                                    <div class="d-flex">
+                                        <a href="{% url 'like_tweet' tweet.id %}" class="like-btn d-flex align-items-center me-4 {% if user in tweet.likes.all %}liked{% endif %}" data-tweet-id="{{ tweet.id }}" data-bs-toggle="tooltip" title="Like">
+                                            <i class="far fa-heart me-2"></i>
+                                            <span class="like-count">{{ tweet.likes.count }}</span>
+                                        </a>
+                                        <a href="{% url 'tweet_detail' tweet.id %}" class="reply-btn d-flex align-items-center me-4" data-bs-toggle="tooltip" title="Comment">
+                                            <i class="far fa-comment me-2"></i>
+                                            <span>{{ tweet.comments.count }}</span>
+                                        </a>
+                                        <a href="{% url 'retweet' tweet.id %}" class="retweet-btn d-flex align-items-center me-4" data-bs-toggle="tooltip" title="Retweet">
+                                            <i class="fas fa-retweet me-2"></i>
+                                            <span>{{ tweet.retweets.count }}</span>
+                                        </a>
+                                        <a href="{% url 'share_tweet' tweet.id %}" class="share-btn d-flex align-items-center" data-bs-toggle="tooltip" title="Share">
+                                            <i class="far fa-share-square me-2"></i>
+                                            <span class="d-none d-md-inline">Share</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+                        <div class="py-5">
+                            <i class="far fa-heart text-primary mb-3 fa-3x"></i>
+                            <h4>No liked tweets yet</h4>
+                            <p class="text-muted">When {{ user_profile.username }} likes tweets, they'll show up here.</p>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -241,6 +297,34 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
+
+        // Handle tab switching with animation
+        $('.nav-tabs .nav-link').on('click', function(e) {
+            e.preventDefault();
+            var target = $(this).attr('href');
+
+            // Add active class to clicked tab
+            $('.nav-tabs .nav-link').removeClass('active');
+            $(this).addClass('active');
+
+            // Fade out current tab content and fade in target tab content
+            $('.tab-pane').removeClass('show active').fadeOut(200);
+            setTimeout(function() {
+                $(target).fadeIn(200).addClass('show active');
+            }, 200);
+
+            // Update URL hash without page jump
+            if(history.pushState) {
+                history.pushState(null, null, target);
+            } else {
+                location.hash = target;
+            }
+        });
+
+        // Check for hash in URL and activate corresponding tab
+        if(window.location.hash) {
+            $('.nav-tabs .nav-link[href="' + window.location.hash + '"]').click();
+        }
     });
 </script>
 {% endblock %}

@@ -1,6 +1,7 @@
 /* Main Styles */
 :root {
     --primary-color: #1DA1F2;
+    --primary-hover: #1a91da;
     --secondary-color: #14171A;
     --background-color: #F5F8FA;
     --text-color: #14171A;
@@ -11,12 +12,26 @@
     --retweet-color: #17BF63;
     --reply-color: #1DA1F2;
     --share-color: #FFAD1F;
+    --success-color: #4BB543;
+    --warning-color: #FFCC00;
+    --danger-color: #FF3333;
+    --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --card-shadow-hover: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.3s;
 }
 
 body {
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Footer Styles */
+footer {
+    margin-top: auto;
 }
 
 /* Navbar Styles */
@@ -51,26 +66,75 @@ body {
 .tweet-card {
     border-radius: 15px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--card-shadow);
     border: 1px solid var(--border-color);
-    transition: box-shadow 0.3s ease;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .tweet-card:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.tweet-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background-color: var(--primary-color);
+    transition: height var(--transition-speed) ease;
+}
+
+.tweet-card:hover::before {
+    height: 100%;
 }
 
 .card-body {
     padding: 1.25rem;
 }
 
+.tweet-image-container {
+    overflow: hidden;
+    max-height: 300px;
+}
+
+.tweet-image {
+    transition: transform var(--transition-speed) ease;
+}
+
+.tweet-card:hover .tweet-image {
+    transform: scale(1.03);
+}
+
 /* Profile Styles */
 .profile-header {
     background-color: var(--primary-color);
     color: white;
-    padding: 2rem;
+    padding: 0;
     border-radius: 15px 15px 0 0;
     position: relative;
+}
+
+.profile-cover {
+    background-color: var(--primary-color);
+    background-image: linear-gradient(135deg, var(--primary-color) 0%, #1a91da 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="5,5" /></svg>');
+    opacity: 0.1;
 }
 
 .profile-img {
@@ -80,6 +144,12 @@ body {
     border: 5px solid white;
     object-fit: cover;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-speed) ease;
+}
+
+.profile-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .profile-stats {
@@ -89,13 +159,68 @@ body {
 }
 
 .profile-stats a {
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all var(--transition-speed) ease;
+}
+
+.profile-stats a:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+.profile-stats a strong {
+    color: var(--primary-color);
+    font-size: 1.2rem;
 }
 
 .profile-bio {
     margin-top: 1rem;
     font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+/* Profile Navigation */
+.profile-nav {
+    background-color: white;
+}
+
+.profile-nav .nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 1rem 0;
+    position: relative;
+    transition: all var(--transition-speed) ease;
+}
+
+.profile-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: all var(--transition-speed) ease;
+    transform: translateX(-50%);
+}
+
+.profile-nav .nav-link.active {
+    color: var(--primary-color);
+}
+
+.profile-nav .nav-link.active::after {
+    width: 50%;
+}
+
+.profile-nav .nav-link:hover {
+    color: var(--primary-color);
+}
+
+.profile-nav .nav-link:hover::after {
+    width: 25%;
 }
 
 /* Tweet Actions */
@@ -110,42 +235,93 @@ body {
     text-decoration: none;
     color: var(--text-muted);
     margin-right: 1.5rem;
-    transition: color 0.2s ease;
+    transition: all var(--transition-speed) ease;
     display: inline-flex;
     align-items: center;
+    position: relative;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
 }
 
 .tweet-actions a i {
     margin-right: 0.5rem;
     font-size: 1.2rem;
+    transition: transform var(--transition-speed) ease;
 }
 
 .tweet-actions a:hover {
     color: var(--primary-color);
+    background-color: var(--hover-color);
+}
+
+.tweet-actions a:hover i {
+    transform: scale(1.2);
 }
 
 .tweet-actions a.like-btn:hover {
     color: var(--like-color);
+    background-color: rgba(224, 36, 94, 0.1);
 }
 
 .tweet-actions a.retweet-btn:hover {
     color: var(--retweet-color);
+    background-color: rgba(23, 191, 99, 0.1);
 }
 
 .tweet-actions a.reply-btn:hover {
     color: var(--reply-color);
+    background-color: rgba(29, 161, 242, 0.1);
 }
 
 .tweet-actions a.share-btn:hover {
     color: var(--share-color);
+    background-color: rgba(255, 173, 31, 0.1);
 }
 
 .liked {
     color: var(--like-color) !important;
 }
 
+.liked i {
+    transform: scale(1.1);
+}
+
 .retweeted {
     color: var(--retweet-color) !important;
+}
+
+/* Action button ripple effect */
+.tweet-actions a::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.tweet-actions a:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
 }
 
 /* Tweet Form */
@@ -284,15 +460,15 @@ body {
         width: 100px;
         height: 100px;
     }
-    
+
     .profile-header {
         padding: 1rem;
     }
-    
+
     .tweet-actions a {
         margin-right: 0.75rem;
     }
-    
+
     .tweet-actions a i {
         margin-right: 0.25rem;
     }
