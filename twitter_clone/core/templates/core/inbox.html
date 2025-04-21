@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Messages - Twitter Clone{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Messages</h2>
+            </div>
+            <div class="card-body p-0">
+                {% if conversations %}
+                    <div class="list-group list-group-flush">
+                        {% for conversation in conversations %}
+                            <a href="{% url 'conversation' conversation.user.username %}" class="list-group-item list-group-item-action {% if conversation.unread_count > 0 %}list-group-item-primary{% endif %}">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ conversation.user.profile.get_profile_pic_url }}" alt="{{ conversation.user.username }}" class="rounded-circle me-2" style="width: 50px; height: 50px; object-fit: cover;">
+                                        <div>
+                                            <h5 class="mb-1">{{ conversation.user.username }}</h5>
+                                            <p class="mb-1 text-truncate" style="max-width: 300px;">
+                                                {% if conversation.message.sender == request.user %}
+                                                    <span class="text-muted">You: </span>
+                                                {% endif %}
+                                                {{ conversation.message.content }}
+                                            </p>
+                                            <small class="text-muted">{{ conversation.message.created_at|date:"F d, Y" }}</small>
+                                        </div>
+                                    </div>
+                                    {% if conversation.unread_count > 0 %}
+                                        <span class="badge bg-primary rounded-pill align-self-center">{{ conversation.unread_count }}</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-4 text-center">
+                        <p class="mb-0">No messages yet. Start a conversation by visiting a user's profile.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

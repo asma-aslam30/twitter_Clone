@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Conversation with {{ other_user.username }} - Twitter Clone{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <a href="{% url 'inbox' %}" class="text-white me-3">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <img src="{{ other_user.profile.get_profile_pic_url }}" alt="{{ other_user.username }}" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    <h4 class="mb-0">{{ other_user.username }}</h4>
+                </div>
+                <a href="{% url 'profile' other_user.username %}" class="btn btn-sm btn-light">
+                    View Profile
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="messages-container" style="height: 400px; overflow-y: auto;">
+                    {% if messages_list %}
+                        {% for message in messages_list %}
+                            <div class="message mb-3 {% if message.sender == request.user %}text-end{% endif %}">
+                                <div class="message-content d-inline-block p-3 rounded {% if message.sender == request.user %}bg-primary text-white{% else %}bg-light{% endif %}" style="max-width: 75%;">
+                                    {{ message.content }}
+                                    <div class="message-time">
+                                        <small class="text-muted">{{ message.created_at|date:"F d, Y g:i A" }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted my-5">
+                            <p>No messages yet. Start the conversation!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        {{ form.content }}
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Scroll to bottom of messages container
+        var messagesContainer = $('.messages-container');
+        messagesContainer.scrollTop(messagesContainer.prop('scrollHeight'));
+        
+        // Auto-resize textarea
+        var textarea = $('#id_content');
+        textarea.css('height', 'auto');
+        textarea.css('height', textarea.prop('scrollHeight') + 'px');
+        
+        textarea.on('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+</script>
+{% endblock %}

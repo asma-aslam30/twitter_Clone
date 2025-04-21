@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ list_type }} - {{ user_profile.username }} - Twitter Clone{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">{{ list_type }} - {{ user_profile.username }}</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <a href="{% url 'profile' user_profile.username %}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Profile
+                    </a>
+                </div>
+
+                {% if list_type == 'Followers' %}
+                    {% if followers %}
+                        <ul class="list-group">
+                            {% for profile in followers %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ profile.get_profile_pic_url }}" alt="{{ profile.user.username }}" class="rounded-circle me-3" width="50" height="50" style="object-fit: cover;">
+                                        <div>
+                                            <h5 class="mb-0">
+                                                <a href="{% url 'profile' profile.user.username %}" class="text-decoration-none text-dark">
+                                                    {{ profile.user.username }}
+                                                </a>
+                                            </h5>
+                                            <small class="text-muted">@{{ profile.user.username }}</small>
+                                        </div>
+                                    </div>
+                                    {% if user != profile.user %}
+                                        {% with is_following=user.profile.following.all %}
+                                            <a href="{% url 'follow_toggle' profile.user.username %}" class="btn btn-sm {% if profile in is_following %}btn-outline-primary{% else %}btn-primary{% endif %}">
+                                                {% if profile in is_following %}Unfollow{% else %}Follow{% endif %}
+                                            </a>
+                                        {% endwith %}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="alert alert-info">
+                            No followers yet.
+                        </div>
+                    {% endif %}
+                {% else %}
+                    {% if following %}
+                        <ul class="list-group">
+                            {% for profile in following %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ profile.get_profile_pic_url }}" alt="{{ profile.user.username }}" class="rounded-circle me-3" width="50" height="50" style="object-fit: cover;">
+                                        <div>
+                                            <h5 class="mb-0">
+                                                <a href="{% url 'profile' profile.user.username %}" class="text-decoration-none text-dark">
+                                                    {{ profile.user.username }}
+                                                </a>
+                                            </h5>
+                                            <small class="text-muted">@{{ profile.user.username }}</small>
+                                        </div>
+                                    </div>
+                                    {% if user != profile.user %}
+                                        {% with is_following=user.profile.following.all %}
+                                            <a href="{% url 'follow_toggle' profile.user.username %}" class="btn btn-sm {% if profile in is_following %}btn-outline-primary{% else %}btn-primary{% endif %}">
+                                                {% if profile in is_following %}Unfollow{% else %}Follow{% endif %}
+                                            </a>
+                                        {% endwith %}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="alert alert-info">
+                            Not following anyone yet.
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

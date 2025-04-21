@@ -1,0 +1,363 @@
+/* Main Styles */
+:root {
+    --primary-color: #1DA1F2;
+    --secondary-color: #14171A;
+    --background-color: #F5F8FA;
+    --text-color: #14171A;
+    --text-muted: #657786;
+    --border-color: #E1E8ED;
+    --hover-color: #E8F5FE;
+    --like-color: #E0245E;
+    --retweet-color: #17BF63;
+    --reply-color: #1DA1F2;
+    --share-color: #FFAD1F;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand, .nav-link {
+    color: var(--primary-color) !important;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    background-color: var(--hover-color);
+    border-radius: 20px;
+}
+
+.nav-link i {
+    font-size: 1.2rem;
+}
+
+.navbar-brand i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* Tweet Card Styles */
+.tweet-card {
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.3s ease;
+}
+
+.tweet-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Profile Styles */
+.profile-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px 15px 0 0;
+    position: relative;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 5px solid white;
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+.profile-stats a {
+    color: white;
+    text-decoration: none;
+}
+
+.profile-bio {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Tweet Actions */
+.tweet-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tweet-actions a {
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-right: 1.5rem;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.tweet-actions a i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.tweet-actions a:hover {
+    color: var(--primary-color);
+}
+
+.tweet-actions a.like-btn:hover {
+    color: var(--like-color);
+}
+
+.tweet-actions a.retweet-btn:hover {
+    color: var(--retweet-color);
+}
+
+.tweet-actions a.reply-btn:hover {
+    color: var(--reply-color);
+}
+
+.tweet-actions a.share-btn:hover {
+    color: var(--share-color);
+}
+
+.liked {
+    color: var(--like-color) !important;
+}
+
+.retweeted {
+    color: var(--retweet-color) !important;
+}
+
+/* Tweet Form */
+.tweet-form {
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.tweet-form textarea {
+    border: none;
+    resize: none;
+    font-size: 1.2rem;
+    padding: 1rem;
+    border-radius: 15px;
+}
+
+.tweet-form textarea:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.tweet-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.tweet-form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.tweet-form-actions i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.tweet-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    border: none;
+}
+
+.tweet-btn:hover {
+    background-color: #1a91da;
+}
+
+/* Comment Styles */
+.comment-card {
+    border-radius: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.comment-form {
+    margin-top: 1rem;
+}
+
+.comment-form textarea {
+    border-radius: 20px;
+    resize: none;
+}
+
+/* Message Styles */
+.messages-container {
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0 0 15px 15px;
+}
+
+.message {
+    margin-bottom: 1rem;
+}
+
+.message-content {
+    max-width: 75%;
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+}
+
+.message-sent {
+    background-color: var(--primary-color);
+    color: white;
+    border-top-right-radius: 4px;
+    margin-left: auto;
+}
+
+.message-received {
+    background-color: #e9ecef;
+    color: var(--text-color);
+    border-top-left-radius: 4px;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    opacity: 0.8;
+}
+
+/* Notification Styles */
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+    background-color: var(--hover-color);
+}
+
+.notification-unread {
+    background-color: #e8f5fe;
+}
+
+.notification-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .profile-header {
+        padding: 1rem;
+    }
+    
+    .tweet-actions a {
+        margin-right: 0.75rem;
+    }
+    
+    .tweet-actions a i {
+        margin-right: 0.25rem;
+    }
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+    --background-color: #15202B;
+    --text-color: #FFFFFF;
+    --text-muted: #8899A6;
+    --border-color: #38444D;
+    --hover-color: #192734;
+}
+
+.dark-mode .navbar,
+.dark-mode .card,
+.dark-mode .tweet-card,
+.dark-mode .comment-card {
+    background-color: #192734;
+    border-color: #38444D;
+}
+
+.dark-mode .card-header {
+    background-color: #22303C;
+    border-color: #38444D;
+    color: white;
+}
+
+.dark-mode .form-control {
+    background-color: #253341;
+    border-color: #38444D;
+    color: white;
+}
+
+.dark-mode .form-control:focus {
+    background-color: #253341;
+    color: white;
+}
+
+.dark-mode .btn-outline-light {
+    color: white;
+    border-color: white;
+}
+
+.dark-mode .text-muted {
+    color: #8899A6 !important;
+}
+
+/* Animations */
+@keyframes like-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.like-animation {
+    animation: like-animation 0.3s ease;
+}
+
+@keyframes retweet-animation {
+    0% { transform: rotate(0); }
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.retweet-animation {
+    animation: retweet-animation 0.5s ease;
+}
